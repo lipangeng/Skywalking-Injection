@@ -2,12 +2,24 @@ package main
 
 import (
 	"flag"
+	"k8s.io/klog"
 	"net/http"
+	env "github.com/Netflix/go-env"
 )
 
+var config = Config{
+	UseTLS:        false,
+	CertFile:      nil,
+	KeyFile:       nil,
+	TLSClientAuth: false,
+	triggerENV:    true,
+}
+
 func main() {
-	config := Config{
-		UseTLS: false,
+
+	if _, err := env.UnmarshalFromEnviron(config); err != nil {
+		klog.Error(err)
+		return
 	}
 
 	config.addFlags()

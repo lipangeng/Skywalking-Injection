@@ -8,10 +8,11 @@ import (
 
 // 配置信息
 type Config struct {
-	UseTLS               bool
-	CertFile             string
-	KeyFile              string
-	RequireTLSClientAuth bool
+	UseTLS        bool   `env:"SWKAC_USE_TLS"`
+	CertFile      string `env:"SWKAC_TLS_CERT"`
+	KeyFile       string `env:"SWKAC_TLS_KEY"`
+	TLSClientAuth bool   `env:"SWKAC_TLS_CLIENT_AUTH"`
+	triggerENV    bool   `env:"TRIGGER_ENV"`
 }
 
 func (c *Config) addFlags() {
@@ -21,7 +22,7 @@ func (c *Config) addFlags() {
 		"File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert).")
 	flag.StringVar(&c.KeyFile, "tls-private-key-file", c.KeyFile,
 		"File containing the default x509 private key matching --tls-cert-file.")
-	flag.BoolVar(&c.RequireTLSClientAuth, "require-tls-client-auth", c.RequireTLSClientAuth,
+	flag.BoolVar(&c.TLSClientAuth, "require-tls-client-auth", c.TLSClientAuth,
 		"Require client auth with TLS, uses mutual tls on apiserver.")
 }
 
@@ -34,7 +35,7 @@ func configTLS(config Config) *tls.Config {
 		Certificates: []tls.Certificate{sCert},
 	}
 
-	if config.RequireTLSClientAuth {
+	if config.TLSClientAuth {
 		tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
 	}
 
