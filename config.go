@@ -12,7 +12,8 @@ type Config struct {
 	CertFile      string `env:"SWKAC_TLS_CERT"`
 	KeyFile       string `env:"SWKAC_TLS_KEY"`
 	TLSClientAuth bool   `env:"SWKAC_TLS_CLIENT_AUTH"`
-	triggerENV    bool   `env:"TRIGGER_ENV"`
+	TriggerENV    bool   `env:"SWKAC_TRIGGER_ENV"`
+	SWImage       string `env:"SWKAC_SW_IMAGE"`
 }
 
 func (c *Config) addFlags() {
@@ -24,6 +25,8 @@ func (c *Config) addFlags() {
 		"File containing the default x509 private key matching --tls-cert-file.")
 	flag.BoolVar(&c.TLSClientAuth, "require-tls-client-auth", c.TLSClientAuth,
 		"Require client auth with TLS, uses mutual tls on apiserver.")
+	flag.BoolVar(&c.TriggerENV, "trigger-env", c.TriggerENV, "enable env matcher")
+	flag.StringVar(&c.SWImage, "sw-image", c.SWImage, "Skywalking Agent Image")
 }
 
 func configTLS(config Config) *tls.Config {

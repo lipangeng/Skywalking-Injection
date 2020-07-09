@@ -70,7 +70,7 @@ func mutatePods(ar v1.AdmissionReview) *v1.AdmissionResponse {
 
 // Match Rule,NameSpaces And Label use Kubernetes, Other use this.
 func matching(ar v1.AdmissionReview, pod corev1.Pod) bool {
-	if config.triggerENV {
+	if config.TriggerENV {
 		if len(pod.Spec.Containers) > 0 {
 			for _, container := range pod.Spec.Containers {
 				if len(container.Env) > 0 {
@@ -85,11 +85,11 @@ func matching(ar v1.AdmissionReview, pod corev1.Pod) bool {
 			}
 		}
 	}
-	return !config.triggerENV
+	return !config.TriggerENV
 }
 
 func containerMatching(container corev1.Container) bool {
-	if config.triggerENV {
+	if config.TriggerENV {
 		if len(container.Env) > 0 {
 			for _, env := range container.Env {
 				if env.Name == "SWKAC_ENABLE" {
@@ -100,7 +100,7 @@ func containerMatching(container corev1.Container) bool {
 			}
 		}
 	}
-	return !config.triggerENV
+	return !config.TriggerENV
 }
 
 func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
@@ -117,16 +117,10 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 		},
 	})
 
-	// addInitContainer
-	initContainer := corev1.Container{
-
-	}
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/initContainers", Value: initContainer})
-
 	// addVolume
 	swVolumeQuantity, _ := resource.ParseQuantity("200Mi")
 	swVolume := corev1.Volume{
-		Name: "sw",
+		Name: "skywalking",
 		VolumeSource: corev1.VolumeSource{
 			EmptyDir: &corev1.EmptyDirVolumeSource{
 				Medium:    corev1.StorageMediumDefault,
@@ -136,13 +130,26 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 	}
 	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes", Value: swVolume})
 
+	// addInitContainer
+	initContainer := corev1.Container{
+		Name:  "skywalking",
+		Image: config.SWImage,
+		VolumeMounts: []corev1.VolumeMount{
+			{
+				Name:      "skywalking",
+				MountPath: "/opt/skywalking",
+			},
+		},
+	}
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/initContainers", Value: initContainer})
+
 	// container cycle
 	for ic, container := range pod.Spec.Containers {
 		if containerMatching(container) {
-			mountPath := fmt.Sprintf("/spec/containers/[%d]/volumeMounts", i)
+			mountPath := fmt.Sprintf("/spec/containers/[%d]/volumeMounts", ic)
 			// volumeMount
 			mount := corev1.VolumeMount{
-				Name:      "sw",
+				Name:      "skywalking",
 				MountPath: "/opt/skywalking",
 			}
 			patches = append(patches, Patch{OP: OP_ADD, Path: mountPath, Value: mount})
