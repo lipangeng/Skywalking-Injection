@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	v1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog"
 	"net/http"
-	"time"
 )
 
 type PatchOP string
@@ -109,24 +109,23 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 		patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels", Value: make(map[string]string)})
 	}
 	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-enabled", Value: "enabled"})
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-timestamp", Value: time.Now().Unix()})
-	//
-	//// addVolume
-	//swVolumeQuantity, _ := resource.ParseQuantity("200Mi")
-	//swVolume := corev1.Volume{
-	//	Name: "skywalking",
-	//	VolumeSource: corev1.VolumeSource{
-	//		EmptyDir: &corev1.EmptyDirVolumeSource{
-	//			Medium:    corev1.StorageMediumDefault,
-	//			SizeLimit: &swVolumeQuantity,
-	//		},
-	//	},
-	//}
-	//if len(pod.Spec.Volumes) == 0 {
-	//	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes", Value: [0]struct{}{}})
-	//}
-	//patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes/", Value: swVolume})
-	//
+
+	// addVolume
+	swVolumeQuantity, _ := resource.ParseQuantity("200Mi")
+	swVolume := corev1.Volume{
+		Name: "skywalking",
+		VolumeSource: corev1.VolumeSource{
+			EmptyDir: &corev1.EmptyDirVolumeSource{
+				Medium:    corev1.StorageMediumDefault,
+				SizeLimit: &swVolumeQuantity,
+			},
+		},
+	}
+	if len(pod.Spec.Volumes) == 0 {
+		patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes", Value: [0]struct{}{}})
+	}
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes/", Value: swVolume})
+
 	//// addInitContainer
 	//initContainer := corev1.Container{
 	//	Name:  "skywalking",
