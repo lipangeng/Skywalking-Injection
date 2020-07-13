@@ -17,8 +17,10 @@ COPY --from=0 /usr/local/bin/tini /bin/tini
 COPY skac /usr/bin/skac
 
 RUN set -eux ;\
+	\
+	chmod +x /usr/bin/skac \
     \
-    skac --version
+    ; skac --version
 
 ENTRYPOINT ["/bin/tini", "--"]
 
