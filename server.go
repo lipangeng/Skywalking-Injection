@@ -49,6 +49,10 @@ func serve(w http.ResponseWriter, r *http.Request, admit admitFunc) {
 		responseAdmissionReview.Response = admit(requestedAdmissionReview)
 	}
 
+	// Default
+	responseAdmissionReview.Kind = requestedAdmissionReview.Kind
+	responseAdmissionReview.APIVersion = requestedAdmissionReview.APIVersion
+
 	// Return the same UID
 	responseAdmissionReview.Response.UID = requestedAdmissionReview.Request.UID
 
