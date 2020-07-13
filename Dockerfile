@@ -9,20 +9,21 @@ RUN set -ex; \
     curl -L -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini
 
 
-FROM dhub.msorg.cn/library/alpine
+FROM dhub.msorg.cn/library/centos:7
 MAINTAINER 李盼庚<lipg@outlook.com>
 
 COPY --from=0 /usr/local/bin/tini /bin/tini
 
-COPY ./skac /usr/bin/
+COPY skac /usr/bin/
 
 RUN set -eux ;\
 	\
-	ls -la /usr/bin/ \
+	ls -la /usr/bin/ | grep skac \
 	\
-	; chmod +x /usr/bin/skac
-#    \
-#    ; /usr/bin/skac --version
+	; chmod +x /bin/tini \
+	; chmod +x /usr/bin/skac \
+    \
+    ; /usr/bin/skac --version
 
 ENTRYPOINT ["/bin/tini", "--"]
 
