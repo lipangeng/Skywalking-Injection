@@ -10,7 +10,7 @@ RUN set -ex; \
 FROM dhub.msorg.cn/library/alpine
 MAINTAINER 李盼庚<lipg@outlook.com>
 
-COPY --from0 /usr/local/bin/tini /bin/tini
+COPY --from=0 /usr/local/bin/tini /bin/tini
 
 COPY skac /usr/bin/skac
 
