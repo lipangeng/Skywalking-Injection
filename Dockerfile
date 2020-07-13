@@ -22,7 +22,7 @@ RUN set -eux ;\
 	\
 	; chmod +x /usr/bin/skac \
     \
-    ; skac --version
+    ; /usr/bin/skac --version
 
 ENTRYPOINT ["/bin/tini", "--"]
 
