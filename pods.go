@@ -107,15 +107,11 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 	var patches []Patch
 
 	// addLabels
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels",
-		Value: struct {
-			Status    string    `json:"skywalking"`
-			Timestamp time.Time `json:"skywalking-timestamp"`
-		}{
-			Status:    "enabled",
-			Timestamp: time.Now(),
-		},
-	})
+	if len(pod.Labels) == 0 {
+		patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels", Value: make(map[string]string)})
+	}
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-enabled", Value: "enabled"})
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-timestamp", Value: time.Now()})
 
 	// addVolume
 	swVolumeQuantity, _ := resource.ParseQuantity("200Mi")
@@ -128,7 +124,10 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 			},
 		},
 	}
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes", Value: swVolume})
+	if len(pod.Spec.Volumes) == 0 {
+		patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes", Value: [0]struct{}{}})
+	}
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/volumes/", Value: swVolume})
 
 	// addInitContainer
 	initContainer := corev1.Container{
@@ -141,21 +140,28 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 			},
 		},
 	}
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/initContainers", Value: initContainer})
+	if len(pod.Spec.InitContainers) == 0 {
+		patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/initContainers", Value: [0]struct{}{}})
+	}
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/spec/initContainers/", Value: initContainer})
 
 	// container cycle
 	for ic, container := range pod.Spec.Containers {
 		if containerMatching(container) {
-			mountPath := fmt.Sprintf("/spec/containers/[%d]/volumeMounts", ic)
+			mountPath := fmt.Sprintf("/spec/containers/%d/volumeMounts", ic)
+
 			// volumeMount
 			mount := corev1.VolumeMount{
 				Name:      "skywalking",
 				MountPath: "/opt/skywalking",
 			}
-			patches = append(patches, Patch{OP: OP_ADD, Path: mountPath, Value: mount})
+			if len(container.VolumeMounts) == 0 {
+				patches = append(patches, Patch{OP: OP_ADD, Path: mountPath, Value: [0]struct{}{}})
+			}
+			patches = append(patches, Patch{OP: OP_ADD, Path: mountPath + "/", Value: mount})
 
 			// add Init Command and Pods Env
-			envPath := fmt.Sprintf("/spec/containers/[%d]/env", ic)
+			envPath := fmt.Sprintf("/spec/containers/%d/env", ic)
 			envSWArg := "-javaagent:/opt/skywalking/skywalking-agent.jar"
 			envOP := OP_ADD
 			if len(container.Env) != 0 {
@@ -169,7 +175,15 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 					}
 				}
 			}
-			patches = append(patches, Patch{OP: envOP, Path: envPath, Value: envSWArg})
+			if len(container.Env) == 0 {
+				patches = append(patches, Patch{OP: OP_ADD, Path: envPath, Value: [0]struct{}{}})
+			}
+			if envOP == OP_REPLACE {
+				patches = append(patches, Patch{OP: envOP, Path: envPath, Value: envSWArg})
+			} else {
+				patches = append(patches, Patch{OP: envOP, Path: envPath + "/",
+					Value: corev1.EnvVar{Name: "JAVA_TOOL_OPTIONS", Value: envSWArg}})
+			}
 		}
 	}
 	return patches
