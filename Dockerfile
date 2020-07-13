@@ -1,4 +1,4 @@
-FROM hub.msorg.cn/library/golang
+FROM dhub.msorg.cn/library/golang
 MAINTAINER 李盼庚<lipg@outlook.com>
 
 RUN set -eux \
@@ -6,7 +6,7 @@ RUN set -eux \
 	; make install
 
 
-FROM hub.msorg.cn/library/alpine
+FROM dhub.msorg.cn/library/alpine
 MAINTAINER 李盼庚<lipg@outlook.com>
 
 COPY --from=0 /usr/local/bin/skac /usr/local/bin/skac
