@@ -15,7 +15,7 @@ var config = Config{
 	KeyFile:       "",
 	TLSClientAuth: false,
 	TriggerENV:    false,
-	SWImage:       "docker.io",
+	SWImage:       "busybox",
 }
 
 func main() {
