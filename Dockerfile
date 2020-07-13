@@ -20,9 +20,9 @@ RUN set -eux ;\
 	\
 	ls -la /usr/bin/ \
 	\
-	; chmod +x /usr/bin/skac \
-    \
-    ; /usr/bin/skac --version
+	; chmod +x /usr/bin/skac
+#    \
+#    ; /usr/bin/skac --version
 
 ENTRYPOINT ["/bin/tini", "--"]
 
