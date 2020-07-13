@@ -1,8 +1,10 @@
-FROM dhub.msorg.cn/library/busybox
+FROM dhub.msorg.cn/library/alpine
 
 # Add Tini
 ENV TINI_VERSION v0.19.0
 RUN set -ex; \
+	\
+	apk add --no-cache curl ;\
 	\
     curl -L -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini
 
