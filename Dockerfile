@@ -14,7 +14,7 @@ MAINTAINER 李盼庚<lipg@outlook.com>
 
 COPY --from=0 /usr/local/bin/tini /bin/tini
 
-COPY skac /usr/bin/skac
+COPY skac /usr/bin/
 
 RUN set -eux ;\
 	\
