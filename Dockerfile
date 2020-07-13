@@ -18,7 +18,7 @@ COPY skac /usr/bin/skac
 
 RUN set -eux ;\
 	\
-	env
+	env \
 	\
 	; chmod +x /usr/bin/skac \
     \
