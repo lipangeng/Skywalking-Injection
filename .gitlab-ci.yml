@@ -15,7 +15,7 @@ go-build:
     - ls -la
   script:
     - make
-    - skac --version
+    - ./skac --version
   artifacts:
     paths:
       - skac
