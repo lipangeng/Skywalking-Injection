@@ -109,7 +109,7 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 		patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels", Value: make(map[string]string)})
 	}
 	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-enabled", Value: "enabled"})
-	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-timestamp", Value: time.Now()})
+	patches = append(patches, Patch{OP: OP_ADD, Path: "/metadata/labels/skywalking-timestamp", Value: time.Now().Unix()})
 	//
 	//// addVolume
 	//swVolumeQuantity, _ := resource.ParseQuantity("200Mi")
