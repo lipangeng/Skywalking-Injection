@@ -186,5 +186,9 @@ func generatePatch(ar v1.AdmissionReview, pod corev1.Pod) []Patch {
 			}
 		}
 	}
+	if klog.V(2) {
+		res, _ := json.Marshal(patches)
+		klog.V(2).Info("Patchs: ", string(res))
+	}
 	return patches
 }
