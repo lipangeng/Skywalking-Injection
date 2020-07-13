@@ -2,7 +2,7 @@ FROM dhub.msorg.cn/library/golang
 MAINTAINER 李盼庚<lipg@outlook.com>
 
 RUN set -eux \
-	; make all \
+	; make \
 	; make install
 
 
