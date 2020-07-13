@@ -3,4 +3,17 @@ include:
     file: 'docker.yaml'
 # 构建步骤
 stages:
+  - go-build
   - docker-build
+
+go-build:
+  image: dhub.msorg.cn/library/golang
+  stage: go-build
+  before_script:
+    - ls -la
+  script:
+    - make
+    - skac --version
+  artifacts:
+    paths:
+      - skac

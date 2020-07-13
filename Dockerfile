@@ -1,16 +1,7 @@
-FROM dhub.msorg.cn/library/golang
-MAINTAINER 李盼庚<lipg@outlook.com>
-
-RUN set -eux \
-	; ls -la \
-	; make \
-	; make install
-
-
 FROM dhub.msorg.cn/library/alpine
 MAINTAINER 李盼庚<lipg@outlook.com>
 
-COPY --from=0 /usr/local/bin/skac /usr/local/bin/skac
+COPY skac /usr/bin/skac
 
 # Add Tini
 ENV TINI_VERSION v0.19.0
@@ -21,4 +12,4 @@ RUN set -ex; \
 
 ENTRYPOINT ["/bin/tini", "--"]
 
-CMD skac $SKAC_OPTIONS
+CMD /usr/bin/skac $SKAC_OPTIONS
