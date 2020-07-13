@@ -14,11 +14,11 @@ MAINTAINER 李盼庚<lipg@outlook.com>
 
 COPY --from=0 /usr/local/bin/tini /bin/tini
 
-COPY skac /usr/bin/
+COPY ./skac /usr/bin/
 
 RUN set -eux ;\
 	\
-	env \
+	ls -la /usr/bin/ \
 	\
 	; chmod +x /usr/bin/skac \
     \
