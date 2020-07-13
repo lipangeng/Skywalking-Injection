@@ -10,12 +10,13 @@ import (
 )
 
 var config = Config{
-	UseTLS:        false,
-	CertFile:      "",
-	KeyFile:       "",
-	TLSClientAuth: false,
-	TriggerENV:    false,
-	SWImage:       "busybox",
+	UseTLS:                          true,
+	CertFile:                        "/etc/skac/tls.crt",
+	KeyFile:                         "/etc/skac/tls.key",
+	TLSClientAuth:                   false,
+	TriggerENV:                      false,
+	SWImage:                         "busybox",
+	SWAgentCollectorBackendServices: "apm-aop.apm:11800",
 }
 
 func main() {
