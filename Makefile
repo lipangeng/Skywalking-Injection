@@ -1,6 +1,6 @@
 BUILD_VERSION   := v1.0.0
 BUILD_TIME      := $(shell date "+%F %T")
-BUILD_NAME      := skac_$(shell date "+%Y%m%d%H" )
+BUILD_NAME      := skac
 SOURCE          := ./
 TARGET_DIR      := /usr/local/bin
 COMMIT_SHA1     := $(shell git rev-parse HEAD )

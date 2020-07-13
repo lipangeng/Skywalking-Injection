@@ -1,0 +1,6 @@
+include:
+  - project: 'devops/gitlab/ci-script'
+    file: 'docker.yaml'
+# 构建步骤
+stages:
+  - docker-build

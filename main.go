@@ -33,6 +33,8 @@ func main() {
 
 	http.HandleFunc("/", serveMutatePods)
 
+	fmt.Println("Starting")
+
 	if config.UseTLS {
 		server := &http.Server{
 			Addr:      ":443",
