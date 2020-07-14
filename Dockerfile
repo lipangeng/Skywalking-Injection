@@ -22,6 +22,8 @@ RUN set -eux ;\
 	\
 	; chmod +x /bin/tini \
 	; chmod +x /usr/bin/skac \
+	\
+	; ldd /usr/bin/skac \
     \
     ; /usr/bin/skac --version
 
