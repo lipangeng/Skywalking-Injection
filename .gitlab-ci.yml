@@ -12,6 +12,7 @@ go-build:
   variables:
     GOPROXY: https://gohub.msorg.cn/public/,direct
   before_script:
+    - apk add --no-cache make
     - ls -la
   script:
     - make
