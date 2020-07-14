@@ -6,13 +6,11 @@ TARGET_DIR      := /usr/local/bin
 COMMIT_SHA1     := $(shell git rev-parse HEAD )
 
 all:
-	CGO_ENABLED=0 \
-	go build -a -ldflags '\
+	go build -ldflags '\
     -X "main.BuildVersion=${BUILD_VERSION}" \
     -X "main.BuildTime=${BUILD_TIME}" \
     -X "main.BuildName=${BUILD_NAME}" \
     -X "main.CommitID=${COMMIT_SHA1}" \
-    -extldflags "-static" \
     ' \
     -o ${BUILD_NAME} ${SOURCE}
 
