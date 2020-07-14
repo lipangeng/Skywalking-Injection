@@ -10,7 +10,7 @@ go-build:
   image: dhub.msorg.cn/library/golang
   stage: go-build
   variables:
-    GOPROXY: https://gohub.msorg.cn/public/,direct
+    GOPROXY: https://goproxy.cn
   before_script:
     - ls -la
   script:
