@@ -9,7 +9,7 @@ RUN set -ex; \
     curl -L -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini
 
 
-FROM dhub.msorg.cn/library/centos:7
+FROM dhub.msorg.cn/library/alpine
 MAINTAINER 李盼庚<lipg@outlook.com>
 
 COPY --from=0 /usr/local/bin/tini /bin/tini
