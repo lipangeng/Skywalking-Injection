@@ -239,6 +239,10 @@ func addInitContainer(ar v1.AdmissionReview, pod corev1.Pod, patches []Patch) []
 				MountPath: DEFINE_AGENT_PATH,
 			},
 		},
+		Env: []corev1.EnvVar{{
+			Name:  "AGENT_HOME",
+			Value: DEFINE_AGENT_PATH,
+		}},
 	}
 
 	if len(pod.Spec.InitContainers) == 0 {

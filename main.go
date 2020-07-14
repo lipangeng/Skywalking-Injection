@@ -15,7 +15,7 @@ var config = Config{
 	KeyFile:                         "/etc/skac/tls.key",
 	TLSClientAuth:                   false,
 	TriggerENV:                      false,
-	SWImage:                         "busybox",
+	SWImage:                         "ilemontech/skywalking-java-agent",
 	SWAgentCollectorBackendServices: "apm-aop.apm:11800",
 }
 
