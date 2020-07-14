@@ -6,6 +6,7 @@ TARGET_DIR      := /usr/local/bin
 COMMIT_SHA1     := $(shell git rev-parse HEAD )
 
 all:
+	CGO_ENABLED=0
 	go build -ldflags '\
     -X "main.BuildVersion=${BUILD_VERSION}" \
     -X "main.BuildTime=${BUILD_TIME}" \
