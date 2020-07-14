@@ -12,7 +12,8 @@ go-build:
   variables:
     GOPROXY: https://gohub.msorg.cn/public/,direct
   before_script:
-    - apk add --no-cache make
+    - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+    - apk add --no-cache make git
     - ls -la
   script:
     - make
