@@ -7,7 +7,7 @@ stages:
   - docker-build
 
 go-build:
-  image: dhub.msorg.cn/library/golang:apline
+  image: dhub.msorg.cn/library/golang:alpine
   stage: go-build
   variables:
     GOPROXY: https://gohub.msorg.cn/public/,direct
