@@ -1,4 +1,4 @@
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: skywalking-injector
@@ -22,6 +22,30 @@ webhooks:
         operations:  ["CREATE"]
         resources:   ["pods"]
         scope: "Namespaced"
+
+# Lower Version
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: skywalking-injector
+webhooks:
+  - failurePolicy: Fail
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZvakNDQTRvQ0NRREZYZTRwM1o0NjREQU5CZ2txaGtpRzl3MEJBUXNGQURDQmtURUxNQWtHQTFVRUJoTUMKUTA0eEVEQU9CZ05WQkFnTUIwSmxhV3BwYm1jeEVEQU9CZ05WQkFjTUIwSmxhV3BwYm1jeER6QU5CZ05WQkFvTQpCbWxNWlcxdmJqRVBNQTBHQTFVRUN3d0dhVXhsYlc5dU1Sc3dHUVlEVlFRRERCSjNkM2N1YVd4bGJXOXVkR1ZqCmFDNWpiMjB4SHpBZEJna3Foa2lHOXcwQkNRRVdFR3hwY0dkQWIzVjBiRzl2YXk1amIyMHdJQmNOTWpBd056RTMKTURFME5EQXhXaGdQTWpFeU1EQTNNVGN3TVRRME1ERmFNSUdSTVFzd0NRWURWUVFHRXdKRFRqRVFNQTRHQTFVRQpDQXdIUW1WcGFtbHVaekVRTUE0R0ExVUVCd3dIUW1WcGFtbHVaekVQTUEwR0ExVUVDZ3dHYVV4bGJXOXVNUTh3CkRRWURWUVFMREFacFRHVnRiMjR4R3pBWkJnTlZCQU1NRW5kM2R5NXBiR1Z0YjI1MFpXTm9MbU52YlRFZk1CMEcKQ1NxR1NJYjNEUUVKQVJZUWJHbHdaMEJ2ZFhSc2IyOXJMbU52YlRDQ0FpSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0lQQURDQ0Fnb0NnZ0lCQUxIUS9ndTE0WUJDYjNRNSthTWtyT3dEeUpQKzQvQUpjRTg0Yk5tci9WbFhEMW9JCnMzTDJvclFicGtRQ1VEVmZqVHFOTWtvT3QrbVpYWHdtMnUzMG1TTkpCRmhaeHEzT2dLSVZxV2IxVWQ5WDRBMjMKOUlxSWREV0NOMndVWlhVd0ZuTTdCYW5xUyt3cmJob3ZxalNFcUI2OUJpbkdjamZvTCsxaWUzdVhqeVBHZklWagpieldVSUdnYzNpVEllc2xyL1prUzBLaDYzbFVtN0NaSFBacVpwMy9vVVNYQmszTXN4dkpCdFZ4QlRQNG5FMCtiCmYvWEkveElTby91ckI1a2RYZW1RM2lnRUtRQmpTWXAvbkthdWEvUHJrZ3BHbVl1a2RlWElVeXhKQk9rNUJCdXcKb3Fid0NBcEFpQ0wzeUMvZnVreEdPZjd6dHdiRGZYU2hXT3ZTSks2NFd0Y1owRHhsQ05VTDFOZzZrcjFLMjRNeApHazZjRDViUWJjWCtEVzhTS25iS0NabzhLR1Jvdjl1cG9tRVc0Q2kzWE8rTjF6cGRST2lwYVpXVTNLdnJGZ2E2CjY5ZmhJM0dnM2RVbFprK2hUazVkMUExNysxU3l3QXRRaldxeG93R3ljY1pPSnRqOUpZaUlITXJsRU9SeWZQTzIKNVg0UG1VSmtoSW9BYWNSdm1oaWRTRFlRTmNMZUt4Ym1TVXdWZEhaSkpGWjJaVjFpcnZPMmM4VEtqNlBXZDA3YQpGNTRvK0JLMVQyMjFWK0hnUnJWbTlaNE5zQWNNc1BScHYzYWNCdk1aWWxxL0h4amttU1NNSHFtd0UwY1d1c28yCkZxdmNiMXBKUGJMdGpQZ1d3VmRPblZxTUc3aTEzYU5uck1mODVKc2VzZVp6VE9zLzFCdlhyODUxVTVMZkFnTUIKQUFFd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFJWjdaWFpXNEhKMTI3enh2T1ltSHU3aC9rNUdwb294dkorcApZS29QRjRpd3BGRGM3ZjBQZHk0K0tVcG1RS2xjYVJuSEZWWGQ5WEo0R1lnNjg5a0xUeVo3c29iam5RdDZOU0tOCmxYTmdvSUp3Zm1ONXpqV25HUCtXTWhvQlJMM0o0bjNTWUdtalkwZTRzOU1wUlBRdklTeUdZcytFQUQxVGozZEQKdnFoM05WTnd2bjJsNkkyY0lxUEVoU01SY3QwU3lPc2o4MDIveFBvajZtZStqRjk4ZGc2V1M5VUhBSnNqcUV6WApzbHdhQTl6c3ZwQlo0TjVjdXNRMmpHWEdEbkVDQUtMNm1idnRVWHBYd012SFd5MG1vQ1g4c0tKcEJkNlZiUHhMCnhlT1duTnpDRWQvYXdqZVk1N3BzOTNidjZVejZ1a2UyV2ZiOUdMd1BCRmQ5RUs1NkV5Y2U5d2daSThvaDJOSVkKYjY2RHAwbExhR2k0OGRZWkpGRU1ETFhOVUV2RXRmZEo3K3lsU1cyWG52bkxDT25oQjJiQm93YmxlMDc1UllzagpsdFVKRWw1YTFZbUhOWnMzeGdyd1ErL3N4bjg1YlArempTSUlqUms1V1Bpbm4vL25vdGp6UHJJSGJmTjY0by95CjAvVWlrZVRjVFZuZUREQUJwdGZ5VXlEbU5pVlhCaHlodks3MTJEZmZ1Q01aclQ1YlF6VUd1cytBUGo4QThoZ0kKbXFSd25LdnJvcHJ2OEp3b2VZbm1rNExkZmxMSlFYczJVdWd2L1p1VmVkeTFBSk5rZThUSXhhRUoyS2hTMGdacQowWXZEVkFRRUg0VlRMeDhWRTdxRm42QTVhaERtVUF0ZEJ5MUNkSy9JQ1o4eDdKZkRCYS9zK0p1K1ZBTGt5Mm9hCjRxVlNEUHQyCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: skywalking-injection
+        namespace: skywalking
+    namespaceSelector:
+      matchLabels:
+        skywalking-injection: "true"
+    name: injection.skywalking.ilemontech.com
+    sideEffects: None
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations:  ["CREATE"]
+        resources:   ["pods"]
 
 ---
 apiVersion: v1
@@ -104,21 +128,3 @@ spec:
       name: http
     - port: 443
       name: https
-
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  labels:
-    abc: abc
-spec:
-  containers:
-    - name: nginx
-      image: nginx
-      imagePullPolicy: IfNotPresent
-  volumes:
-    - name: test
-      emptyDir:
-        sizeLimit: 200Mi
-  restartPolicy: Always

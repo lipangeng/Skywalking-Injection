@@ -14,7 +14,8 @@ type Config struct {
 	TLSClientAuth                   bool   `env:"SWKAC_TLS_CLIENT_AUTH"`
 	TriggerENV                      bool   `env:"SWKAC_TRIGGER_ENV"`
 	SWImage                         string `env:"SWKAC_SW_IMAGE"`
-	SWAgentCollectorBackendServices string `env:"SW_AGENT_COLLECTOR_BACKEND_SERVICES"`
+	SWAgentCollectorBackendServices string `env:"SWKAC_SW_AGENT_COLLECTOR_BACKEND_SERVICES"`
+	SWJavaENVName                   string `env:"SWKAC_SW_JAVA_ENV_NAME"`
 }
 
 func (c *Config) addFlags() {

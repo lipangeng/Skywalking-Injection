@@ -15,10 +15,11 @@ import (
 type PatchOP string
 
 const (
-	OP_ADD            PatchOP = "add"
-	OP_REPLACE        PatchOP = "replace"
-	OP_REMOVE         PatchOP = "remove"
-	DEFINE_AGENT_PATH         = "/opt/skywalking"
+	OP_ADD                PatchOP = "add"
+	OP_REPLACE            PatchOP = "replace"
+	OP_REMOVE             PatchOP = "remove"
+	DEFINE_AGENT_PATH             = "/opt/skywalking"
+	DEFINE_JAVA_AGENT_ENV         = "SKAC_JAVA_AGENT_ENV"
 )
 
 type Patch struct {
@@ -186,12 +187,26 @@ func addContainerCollectorDefine(ar v1.AdmissionReview, pod corev1.Pod, ic int, 
 }
 
 func addContainerStartAgentCommand(ar v1.AdmissionReview, pod corev1.Pod, ic int, container corev1.Container, patches []Patch) []Patch {
+	envName := config.SWJavaENVName
 	envPath := fmt.Sprintf("/spec/containers/%d/env", ic)
 	envSWArg := "-javaagent:" + DEFINE_AGENT_PATH + "/skywalking-agent.jar"
 	envOP := OP_ADD
+
+	// 定制环境变量，通过环境变量的定制，修改默认的Agent启动环境变量
+	if len(container.Env) != 0 {
+		for _, env := range container.Env {
+			if env.Name == DEFINE_JAVA_AGENT_ENV {
+				if len(env.Value) != 0 {
+					envName = env.Value
+				}
+			}
+		}
+	}
+
+	// 检查操作类型，如果变量已存在，则扩展该变量
 	if len(container.Env) != 0 {
 		for ie, env := range container.Env {
-			if env.Name == "JAVA_TOOL_OPTIONS" {
+			if env.Name == envName {
 				if len(env.Value) != 0 {
 					envSWArg = env.Value + " " + envSWArg
 					envPath = envPath + "/" + string(ie)
@@ -200,6 +215,7 @@ func addContainerStartAgentCommand(ar v1.AdmissionReview, pod corev1.Pod, ic int
 			}
 		}
 	}
+
 	if len(container.Env) == 0 {
 		patches = append(patches, Patch{OP: OP_ADD, Path: envPath, Value: [0]struct{}{}})
 	}
@@ -208,7 +224,7 @@ func addContainerStartAgentCommand(ar v1.AdmissionReview, pod corev1.Pod, ic int
 		patches = append(patches, Patch{OP: envOP, Path: envPath, Value: envSWArg})
 	} else {
 		patches = append(patches, Patch{OP: envOP, Path: envPath + "/-",
-			Value: corev1.EnvVar{Name: "JAVA_TOOL_OPTIONS", Value: envSWArg}})
+			Value: corev1.EnvVar{Name: envName, Value: envSWArg}})
 	}
 	return patches
 }

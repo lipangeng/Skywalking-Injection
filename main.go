@@ -16,7 +16,8 @@ var config = Config{
 	TLSClientAuth:                   false,
 	TriggerENV:                      false,
 	SWImage:                         "ilemontech/skywalking-java-agent",
-	SWAgentCollectorBackendServices: "apm-aop.apm:11800",
+	SWAgentCollectorBackendServices: "skywalking-aop.skywalking:11800",
+	SWJavaENVName:                   "JAVA_TOOL_OPTIONS",
 }
 
 func main() {
@@ -32,7 +33,7 @@ func main() {
 
 	showVersion()
 
-	http.HandleFunc("/health",health)
+	http.HandleFunc("/health", health)
 	http.HandleFunc("/", serveMutatePods)
 
 	fmt.Println("Starting")
