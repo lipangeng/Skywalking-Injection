@@ -76,3 +76,8 @@ func toAdmissionResponse(err error) *v1.AdmissionResponse {
 		},
 	}
 }
+
+// Health Check
+func health(w http.ResponseWriter, r *http.Request) {
+	_, _ = w.Write([]byte("ok"))
+}

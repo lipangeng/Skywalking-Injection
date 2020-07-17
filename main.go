@@ -32,6 +32,7 @@ func main() {
 
 	showVersion()
 
+	http.HandleFunc("/health",health)
 	http.HandleFunc("/", serveMutatePods)
 
 	fmt.Println("Starting")
