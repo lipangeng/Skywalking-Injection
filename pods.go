@@ -287,12 +287,12 @@ func volumeName(id string) string {
 	if len(id) > 8 {
 		id = id[0:8]
 	}
-	return "sw-volume-" + id
+	return "skywalking-" + id
 }
 
 func initContainerName(id string) string {
 	if len(id) > 8 {
 		id = id[0:8]
 	}
-	return "sw-init-" + id
+	return "skywalking-init-" + id
 }
