@@ -1,12 +1,25 @@
-FROM dhub.msorg.cn/library/alpine
+FROM golang:alpine
+
+ADD ./ /app/
+
+WORKDIR /app
+
+RUN set -eux; \
+	\
+	apk add --no-cache make git \
+	; ls -la \
+	; make \
+	; ./skac --version
+
+
+FROM alpine
 MAINTAINER 李盼庚<lipg@outlook.com>
 
-COPY skac /usr/bin/
+COPY --from=0 /app/skac /usr/bin/
 
 RUN set -eux ;\
 	\
-	sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
-	; apk add --no-cache tini \
+	apk add --no-cache tini \
 	\
 	; chmod +x /usr/bin/skac \
     \
