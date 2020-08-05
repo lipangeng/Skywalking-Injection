@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skywalking-injection
+  namespace: skywalking
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: skywalking-injection
+      namespace: skywalking
+      labels:
+        app: skywalking-injection
+    spec:
+      containers:
+        - name: skywalking-injection
+          image: 172.16.56.199:5000/yonyoucloud-kubernetes/skywalking-injection:7.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: SWKAC_TRIGGER_ENV
+              value: "true"
+            - name: SKAC_OPTIONS
+              value: -v 3
+            - name: SWKAC_SW_IMAGE
+              value: 172.16.56.199:5000/yonyoucloud-kubernetes/skywalking-java-agent:7.0.0
+            - name: SWKAC_SW_AGENT_COLLECTOR_BACKEND_SERVICES
+              value: apm-aop.apmtest:11800
+            - name: SWKAC_SW_JAVA_ENV_NAME
+              value: CATALINA_OPTS
+          resources:
+            requests:
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              port: https
+              path: /health
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              port: https
+              path: /health
+              scheme: HTTPS
+          volumeMounts:
+            - mountPath: /etc/skac/
+              name: cert
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: cert
+          secret:
+            secretName: skywalking
+  selector:
+    matchLabels:
+      app: skywalking-injection

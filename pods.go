@@ -18,6 +18,7 @@ const (
 	OP_ADD                PatchOP = "add"
 	OP_REPLACE            PatchOP = "replace"
 	OP_REMOVE             PatchOP = "remove"
+	DEFINE_AGENT_ENABLED          = "SWKAC_ENABLE"
 	DEFINE_AGENT_PATH             = "/opt/skywalking"
 	DEFINE_JAVA_AGENT_ENV         = "SKAC_JAVA_AGENT_ENV"
 )
@@ -77,7 +78,7 @@ func matching(ar v1.AdmissionReview, pod corev1.Pod) bool {
 			for _, container := range pod.Spec.Containers {
 				if len(container.Env) > 0 {
 					for _, env := range container.Env {
-						if env.Name == "SWKAC_ENABLE" {
+						if env.Name == DEFINE_AGENT_ENABLED {
 							if env.Value == "true" {
 								return true
 							}
@@ -94,7 +95,7 @@ func containerMatching(container corev1.Container) bool {
 	if config.TriggerENV {
 		if len(container.Env) > 0 {
 			for _, env := range container.Env {
-				if env.Name == "SWKAC_ENABLE" {
+				if env.Name == DEFINE_AGENT_ENABLED {
 					if env.Value == "true" {
 						return true
 					}
