@@ -11,11 +11,11 @@ import (
 
 var config = Config{
 	UseTLS:                          true,
-	CertFile:                        "/etc/skac/tls.crt",
-	KeyFile:                         "/etc/skac/tls.key",
+	CertFile:                        "/etc/swkac/tls.crt",
+	KeyFile:                         "/etc/swkac/tls.key",
 	TLSClientAuth:                   false,
 	TriggerENV:                      false,
-	SWImage:                         "ilemontech/skywalking-java-agent",
+	SWImage:                         "lipangeng/skywalking-initcontainer:latest",
 	SWAgentCollectorBackendServices: "skywalking-aop.skywalking:11800",
 	SWJavaENVName:                   "JAVA_TOOL_OPTIONS",
 }

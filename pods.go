@@ -20,7 +20,7 @@ const (
 	OP_REMOVE             PatchOP = "remove"
 	DEFINE_AGENT_ENABLED          = "SWKAC_ENABLE"
 	DEFINE_AGENT_PATH             = "/opt/skywalking"
-	DEFINE_JAVA_AGENT_ENV         = "SKAC_JAVA_AGENT_ENV"
+	DEFINE_JAVA_AGENT_ENV         = "SWKAC_JAVA_AGENT_ENV"
 )
 
 type Patch struct {
